@@ -1,0 +1,76 @@
+---
+
+---
+
+<div data-id="counter">
+  <p class="count">カウント<output>0</output></p>
+  <button type="button" class="decrement">- Decrement</button>
+  <button type="button" class="increment">+ Increment</button>
+</div>
+
+<script>
+  const CounterList = document.querySelectorAll("[data-id='counter']");
+  for (const counter of CounterList) {
+    const output = counter.querySelector<HTMLOutputElement>("output");
+    const incrementButton =
+      counter.querySelector<HTMLButtonElement>(".increment");
+    const decrementButton =
+      counter.querySelector<HTMLButtonElement>(".decrement");
+
+    if (!output || !incrementButton || !decrementButton) {
+      throw new Error("Counter component is missing required elements");
+    }
+
+    let count = 0;
+
+    function initSetCount(output: HTMLOutputElement): (count: number) => void {
+      return (count: number) => {
+        output.textContent = count.toString();
+      };
+    }
+
+    const setCount = initSetCount(output);
+    setCount(count); // Initialize the count display
+
+    incrementButton.addEventListener("click", () => setCount(++count));
+
+    decrementButton.addEventListener("click", () => setCount(--count));
+  }
+</script>
+
+<style>
+  [data-id="counter"] {
+    display: grid;
+    grid-template-areas: "output output" "decrement increment";
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .count {
+    display: grid;
+    place-items: center;
+
+    grid-area: output;
+    justify-self: center;
+    
+    output {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+  }
+
+  button {
+    padding: 0.5rem;
+    font-weight: bold;
+    color: white;
+  }
+
+  .increment {
+    grid-area: increment;
+    background-color: #28a745;
+  }
+  .decrement {
+    grid-area: decrement;
+    background-color: #dc3545;
+  }
+</style>
